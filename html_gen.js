@@ -24,7 +24,7 @@ var myTemplate = {
     "pov_sidebar": {
         "tag": "div",
         "classList": [
-            "hidden"
+        "hidden"
         ],
         "children": [
             {
@@ -32,16 +32,18 @@ var myTemplate = {
                     "tag": "button",
                     "type": "button",
                     "classList": [
-                        "hidden"
+                    "hidden"
                     ],
                     "onclick": "document.getElementById('pov_sidebar').classList.toggle('hidden');document.getElementById('pov_expand_button').classList.toggle('hidden');"
                 }
             },
+
             {
                 "pov_motd": {
                     "tag": "div"
                 }
             },
+
             {
                 "pov_related": {
                     "tag": "div",
@@ -54,8 +56,33 @@ var myTemplate = {
                     ]
                 }
             },
+
             {
                 "pov_comments_box": {
+                    "tag": "div"
+                }
+            },
+
+            {
+                "pov_reply_box": {
+                    "tag": "div",
+                    "children": [
+                        {
+                            "no_id": {
+                                "tag": "textarea",
+                                "type": "text",
+                                "properties": {
+                                    "cols": "50",
+                                    "rows": "10"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+
+            {
+                "status_message": {
                     "tag": "div"
                 }
             }
@@ -64,44 +91,44 @@ var myTemplate = {
 }
 
 function parseTemplate(myTemplate) {
-        function parseChild(myChild, myParentElement) {
-                myParentElement = myParentElement || document.getElementsByTagName('body')[0];
-                var myChildElement = myChild[Object.getOwnPropertyNames(myChild)[0]];
-                var myChildElementId = Object.getOwnPropertyNames(myChild)[0];
-                var e = document.createElement(myChildElement.tag);
-                myChildElementId === 'no_id' ? false : e.id = myChildElementId;
-                if (e) {
-                        console.log(myChildElement)
-                        if (!!myChildElement.style) {
-                                console.log('Appending style');
-                                e.style = myChildElement.style;
-                        }
-                        if (!!myChildElement.classList) {
-                                console.log('Appending classlist');
-                                for (var myClass in myChildElement.classList) {
-                                        e.classList.add(myChildElement.classList[myClass]);
-                                }
-                        }
-                        if (!!myChildElement.onclick) {
-                                console.log('Appending onclick');
-                                e.onclick = new Function(myChildElement.onclick);
-                        }
-                        if (!!myChildElement.children) {
-                                console.log('Appending children');
-                                myChildElement.children.forEach(function(element) {
-                                        parseChild(element, e);
-                                });
-                        }
-                } else {
-                        console.log('element === null');
+    function parseChild(myChild, myParentElement) {
+        myParentElement = myParentElement || document.getElementsByTagName('body')[0];
+        var myChildElement = myChild[Object.getOwnPropertyNames(myChild)[0]];
+        var myChildElementId = Object.getOwnPropertyNames(myChild)[0];
+        var e = document.createElement(myChildElement.tag);
+        myChildElementId === 'no_id' ? false : e.id = Object.getOwnPropertyNames(myChild)[0];
+        if (e) {
+            if (!!myChildElement.style) {
+                e.style = myChildElement.style;
+            }
+            if (!!myChildElement.classList) {
+                for (var myClass in myChildElement.classList) {
+                    e.classList.add(myChildElement.classList[myClass]);
                 }
-                myParentElement.appendChild(e);
+            }
+            if (!!myChildElement.onclick) {
+                e.onclick = new Function(myChildElement.onclick);
+            }
+            if (!!myChildElement.children) {
+                myChildElement.children.forEach(function(element) {
+                    parseChild(element, e);
+                });
+            }
+            if (!!myChildElement.properties) {
+                for (var myProperty in myChildElement.properties) {
+                    var myValue = myChildElement.properties[myProperty];
+                    e[myProperty] = myValue;
+                }
+            }
+        } else {
+            console.log('element === null');
         }
+        myParentElement.appendChild(e);
+    }
 
-        for (var myElementId in Object.getOwnPropertyNames(myTemplate)) {
-                console.log('parsing ' + Object.getOwnPropertyNames(myTemplate)[myElementId]);
-                parseChild(myTemplate);
-        }
+    for (var myElementId in Object.getOwnPropertyNames(myTemplate)) {
+        parseChild(myTemplate);
+    }
 };
 
 parseTemplate(myTemplate);
