@@ -68,12 +68,20 @@ var myTemplate = {
                     "tag": "div",
                     "children": [
                         {
-                            "no_id": {
+                            "reply_content_field": {
                                 "tag": "textarea",
-                                "type": "text",
                                 "properties": {
                                     "cols": "50",
                                     "rows": "10"
+                                }
+                            }
+                        },
+                        {
+                            "pov_submit_reply_button": {
+                                "tag": "input",
+                                "type": "button",
+                                "properties": {
+                                    "value": "Komentiraj"
                                 }
                             }
                         }
@@ -90,6 +98,8 @@ var myTemplate = {
     }
 }
 
+
+
 function parseTemplate(myTemplate) {
     function parseChild(myChild, myParentElement) {
         myParentElement = myParentElement || document.getElementsByTagName('body')[0];
@@ -105,6 +115,9 @@ function parseTemplate(myTemplate) {
                 for (var myClass in myChildElement.classList) {
                     e.classList.add(myChildElement.classList[myClass]);
                 }
+            }
+            if (!!myChildElement.type) {
+                e.type = myChildElement.type;
             }
             if (!!myChildElement.onclick) {
                 e.onclick = new Function(myChildElement.onclick);
@@ -132,5 +145,3 @@ function parseTemplate(myTemplate) {
 };
 
 parseTemplate(myTemplate);
-
-// **********************************************************
