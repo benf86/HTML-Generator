@@ -67,9 +67,9 @@ function parseTemplate(myTemplate) {
         function parseChild(myChild, myParentElement) {
                 myParentElement = myParentElement || document.getElementsByTagName('body')[0];
                 var myChildElement = myChild[Object.getOwnPropertyNames(myChild)[0]];
-                var myChildElementId = myChild[Object.getOwnPropertyNames(myChild)[0]];
+                var myChildElementId = Object.getOwnPropertyNames(myChild)[0];
                 var e = document.createElement(myChildElement.tag);
-                myChildElementId === 'no_id' ? false : e.id = Object.getOwnPropertyNames(myChild)[0];
+                myChildElementId === 'no_id' ? false : e.id = myChildElementId;
                 if (e) {
                         console.log(myChildElement)
                         if (!!myChildElement.style) {
