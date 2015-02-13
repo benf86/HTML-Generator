@@ -120,7 +120,12 @@ function parseTemplate(myTemplate) {
                 e.type = myChildElement.type;
             }
             if (!!myChildElement.onclick) {
-                e.onclick = new Function(myChildElement.onclick);
+                if (typeof myChildElement.onclick == 'string') {
+                    e.onclick = new Function(myChildElement.onclick);
+                }
+                else {
+                    e.onclick = myChildElement.onclick;
+                }
             }
             if (!!myChildElement.children) {
                 myChildElement.children.forEach(function(element) {
